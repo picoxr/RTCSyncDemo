@@ -17,16 +17,18 @@
 
 ​	![screenshot](https://github.com/picoxr/RTCSyncDemo/blob/main/Assets/Screenshot/screenshot.jpg)
 
-**Login：** click to initialize the Pico platform SDK, initialize the RTC engine and login user account.
+Here is the instruction of RTC demo:
 
-**RoomId：** enter the room number you want to enter or create.
+- **Login：** click to initialize the Pico platform SDK, initialize the RTC engine and login user account.
 
-**JoinRTCRoom:** join the room and open the audio.
+- **RoomId：** enter the room number you want to enter or create.
 
-**MuteOthers:** receive or not to receive the sound of everyone else in the room.
+- **JoinRTCRoom:** join the room and open the audio.
 
-**MuteSelf:** make oneself voice able/unable to be heard be others in the same room.
+- **MuteOthers:** receive or not to receive the sound of everyone else in the room.
 
-**LeaveRTCRoom:** leave the room and stop the audio.
+- **MuteSelf:** make oneself voice able/unable to be heard be others in the same room.
 
-**clear:** clear the text on the right.
+- **LeaveRTCRoom:** leave the room and stop the audio.
+
+- **clear:** clear the text on the right.
