@@ -21,7 +21,7 @@ Here is the instruction of RTC demo:
 
 - **Login：** click to initialize the Pico platform SDK, initialize the RTC engine and login user account.
 
-- **RoomId：** enter the room number you want to enter or create.
+- **RoomId：** enter the room id you want to enter or create (note: only user inputs same room id can join the same room).
 
 - **JoinRTCRoom:** join the room and open the audio.
 
