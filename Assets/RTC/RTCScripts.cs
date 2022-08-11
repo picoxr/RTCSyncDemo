@@ -24,8 +24,7 @@ namespace Pico.Platform.Samples.RtcDemo
             var Mute = GameObject.Find("AudioMute").GetComponent<Toggle>(); 
             var MuteOthers = GameObject.Find("MuteOthers").GetComponent<Toggle>(); 
 
-            InputRoomId = GameObject.Find("InputRoomId").GetComponent<InputField>();
-            AddInfo("hello world");
+            InputRoomId = GameObject.Find("InputRoomId").GetComponent<InputField>(); 
 
             RtcService.SetOnJoinRoomResultCallback(OnJoinRoom);
             RtcService.SetOnLeaveRoomResultCallback(OnLeaveRoom);
