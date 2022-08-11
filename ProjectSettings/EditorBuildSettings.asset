@@ -1,0 +1,13 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/RTC/RTCScene.unity
+    guid: 026b68be2c8b8574aba9e37a9ce9d157
+  m_configObjects:
+    Unity.XR.PXR.Settings: {fileID: 11400000, guid: c4c110b6a61657546b16974677a72765, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 6e06dbcc09e658b49a3efd0ba1c88920, type: 2}
