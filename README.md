@@ -14,3 +14,4 @@
 ## Description：
 
 -  This demo shows how to use the Pico Unity Platform SDK to implement Real-Time Communication. 
+https://github.com/picoxr/RTCSyncDemo/blob/main/Assets/Screenshot/screenshot.jpg
