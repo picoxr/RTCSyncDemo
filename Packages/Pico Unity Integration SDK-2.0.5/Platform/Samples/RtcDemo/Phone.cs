@@ -298,6 +298,7 @@ namespace Pico.Platform.Samples.RtcDemo
         {
             if (!(CheckRoomId() && CheckUserId()))
             {
+                Log("login error");
                 return;
             }
 

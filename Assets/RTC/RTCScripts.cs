@@ -14,7 +14,7 @@ namespace Pico.Platform.Samples.RtcDemo
 {
     public class RTCScripts : MonoBehaviour
     {
-        public TextMeshProUGUI Info;//初始文本output text
+        public Text Info;//初始文本output text
         public static User myUser = null;//get pico account user message
         private InputField InputRoomId;//input room id 
         float _lastRoomStatsTime = 0;//The timestamp of print room stats.Used for control frequency.
@@ -47,21 +47,21 @@ namespace Pico.Platform.Samples.RtcDemo
             {
                 if (v)
                 {
-                    AddInfo($"Mute other player voice");
+                    //AddInfo($"Mute other player voice");
                     RtcService.RoomPauseAllSubscribedStream(InputRoomId.text);
-                    AddInfo($"StartMuteOthers Done");
+                    //AddInfo($"StartMuteOthers Done");
                 }
                 else
                 {
-                    AddInfo($"Before ResumeVoiceCapture");
+                    //AddInfo($"Before ResumeVoiceCapture");
                     RtcService.RoomResumeAllSubscribedStream(InputRoomId.text);
-                    AddInfo($"ResumeAudio Done");
+                    //AddInfo($"ResumeAudio Done");
                 }
             });
 
             Mute.onValueChanged.AddListener(mute =>
             {
-                AddInfo($"MuteLocalAudio {mute}");
+                //AddInfo($"MuteLocalAudio {mute}");
                 if (mute)
                 {
                     RtcService.MuteLocalAudio(RtcMuteState.On);
@@ -71,7 +71,7 @@ namespace Pico.Platform.Samples.RtcDemo
                     RtcService.MuteLocalAudio(RtcMuteState.Off);
                 }
 
-                AddInfo($"MuteLocalAudio {mute} Done");
+                //AddInfo($"MuteLocalAudio {mute} Done");
             }); 
         } 
 
@@ -106,7 +106,7 @@ namespace Pico.Platform.Samples.RtcDemo
                     else
                     {
                         myUser = me;
-                        AddInfo("登录成功！！");
+                        AddInfo("Login Succeed！！");
                         AddInfo($"name:{me.DisplayName} \nId:{me.ID}");
                     }
                 }
@@ -211,7 +211,7 @@ namespace Pico.Platform.Samples.RtcDemo
                     roomId = joinRoomResult.RoomId;
                 }
 
-                AddInfo($"[JoinRoomError]code={err.Code} message={err.Message} roomId={roomId}");
+                //AddInfo($"[JoinRoomError]code={err.Code} message={err.Message} roomId={roomId}");
                 return;
             }
             RtcService.StartAudioCapture();//open audio capture
@@ -219,11 +219,11 @@ namespace Pico.Platform.Samples.RtcDemo
             var rtcJoinRoomResult = msg.Data;
             if (rtcJoinRoomResult.ErrorCode != 0)
             {
-                AddInfo($"[JoinRoomError]code={rtcJoinRoomResult.ErrorCode} RoomId={rtcJoinRoomResult.RoomId} UserId={rtcJoinRoomResult.UserId}");
+                //AddInfo($"[JoinRoomError]code={rtcJoinRoomResult.ErrorCode} RoomId={rtcJoinRoomResult.RoomId} UserId={rtcJoinRoomResult.UserId}");
                 return;
             }
             
-            AddInfo($"[JoinRoomOk] Elapsed:{rtcJoinRoomResult.Elapsed} JoinType:{rtcJoinRoomResult.JoinType} RoomId:{rtcJoinRoomResult.RoomId} UserName:{rtcJoinRoomResult.UserId}");
+            //AddInfo($"[JoinRoomOk] Elapsed:{rtcJoinRoomResult.Elapsed} JoinType:{rtcJoinRoomResult.JoinType} RoomId:{rtcJoinRoomResult.RoomId} UserName:{rtcJoinRoomResult.UserId}");
         }
 
 
