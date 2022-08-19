@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Pico.Platform;
-using Pico.Platform.Models;
-using TMPro;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
+using System.Text; 
+using Pico.Platform.Models; 
+using UnityEngine; 
 using UnityEngine.UI;
 
 
@@ -14,18 +10,26 @@ namespace Pico.Platform.Samples.RtcDemo
 {
     public class RTCScripts : MonoBehaviour
     {
-        public Text Info;//³õÊ¼ÎÄ±¾output text
-        public static User myUser = null;//get pico account user message
-        private InputField InputRoomId;//input room id 
-        float _lastRoomStatsTime = 0;//The timestamp of print room stats.Used for control frequency.
+        // Output text
+        public Text Info;
+
+        // Get pico account user message
+        public static User MyUser = null;
+
+        // Input room id
+        private InputField inputRoomId;
+
+        // The timestamp of print room stats. Used for control frequency.
+        private float lastRoomStatsTime = 0;
+
 
         private void Start()
         { 
-            var Mute = GameObject.Find("AudioMute").GetComponent<Toggle>(); 
-            var MuteOthers = GameObject.Find("MuteOthers").GetComponent<Toggle>(); 
+            var mute = GameObject.Find("AudioMute").GetComponent<Toggle>(); 
+            var muteOthers = GameObject.Find("MuteOthers").GetComponent<Toggle>(); 
+            inputRoomId = GameObject.Find("InputRoomId").GetComponent<InputField>(); 
 
-            InputRoomId = GameObject.Find("InputRoomId").GetComponent<InputField>(); 
-
+            // Callback function of RtcService.
             RtcService.SetOnJoinRoomResultCallback(OnJoinRoom);
             RtcService.SetOnLeaveRoomResultCallback(OnLeaveRoom);
             RtcService.SetOnUserLeaveRoomResultCallback(OnUserLeaveRoom);
@@ -41,27 +45,29 @@ namespace Pico.Platform.Samples.RtcDemo
             RtcService.SetOnUserStopAudioCapture(OnUserStopAudioCapture);
             RtcService.SetOnLocalAudioPropertiesReport(OnLocalAudioPropertiesReport);
             RtcService.SetOnRemoteAudioPropertiesReport(OnRemoteAudioPropertiesReport);
-              
 
-            MuteOthers.onValueChanged.AddListener((v) =>
+
+            // Turn on or off the others' audio in the room.
+            muteOthers.onValueChanged.AddListener((v) =>
             {
                 if (v)
                 {
-                    //AddInfo($"Mute other player voice");
-                    RtcService.RoomPauseAllSubscribedStream(InputRoomId.text);
-                    //AddInfo($"StartMuteOthers Done");
+                    AddInfo($"Mute other player voice");
+                    RtcService.RoomPauseAllSubscribedStream(inputRoomId.text);
+                    AddInfo($"StartMuteOthers Done");
                 }
                 else
                 {
-                    //AddInfo($"Before ResumeVoiceCapture");
-                    RtcService.RoomResumeAllSubscribedStream(InputRoomId.text);
-                    //AddInfo($"ResumeAudio Done");
+                    AddInfo($"Before ResumeVoiceCapture");
+                    RtcService.RoomResumeAllSubscribedStream(inputRoomId.text);
+                    AddInfo($"ResumeAudio Done");
                 }
             });
 
-            Mute.onValueChanged.AddListener(mute =>
+            // Turn on or off user's own audio.
+            mute.onValueChanged.AddListener(mute =>
             {
-                //AddInfo($"MuteLocalAudio {mute}");
+                AddInfo($"MuteLocalAudio {mute}");
                 if (mute)
                 {
                     RtcService.MuteLocalAudio(RtcMuteState.On);
@@ -70,43 +76,43 @@ namespace Pico.Platform.Samples.RtcDemo
                 {
                     RtcService.MuteLocalAudio(RtcMuteState.Off);
                 }
-
-                //AddInfo($"MuteLocalAudio {mute} Done");
+                AddInfo($"MuteLocalAudio {mute} Done");
             }); 
-        } 
+        }
 
 
-        //output text on canvas
+        /// <summary>
+        /// Output text on canvas.
+        /// </summary> 
         public void AddInfo(string info)
         {
             Info.text += $"{info}\n";
         }
 
 
-        //get pico account user message
+        /// <summary>
+        /// Get pico account user message.
+        /// </summary>
         public void Login()
-        {
-            //oculus is always logged in!
+        { 
             UserService.GetLoggedInUser().OnComplete
             (
                 msg =>
                 {
                     if (msg.IsError)
                     {
-                        AddInfo("LoginFailed");
+                        AddInfo($"LoginFailed:code={msg.GetError().Code} message={msg.GetError().Message}");
                         return;
                     }
-
                     User me = msg.Data;
                     if (me == null)
-                    {
-                        string errorMsg = "Failed To Get Logged In User. User is null";
-                        AddInfo(errorMsg);
+                    { 
+                        AddInfo($"Get User Failed:{me}");
                     }
                     else
                     {
-                        myUser = me;
-                        AddInfo("Login Succeed£¡£¡");
+                        MyUser = me;
+                        AddInfo("Login Succeed!!");
                         AddInfo($"name:{me.DisplayName} \nId:{me.ID}");
                     }
                 }
@@ -114,20 +120,15 @@ namespace Pico.Platform.Samples.RtcDemo
         }
 
 
-        //clear the text
-        public void ClearText()
-        {
-            Info.text = "";
-        }
-
-
-        //init RTC
-        public void initRtc()
+        /// <summary>
+        /// Init RTC.
+        /// </summary>
+        public void InitRtc()
         {
             var res = RtcService.InitRtcEngine();
             if (res != RtcEngineInitResult.Success)
             {
-                AddInfo($"Init RTC Engine Failed{res}");
+                AddInfo($"Init RTC Engine Failed:{res}");
                 throw new UnityException($"Init RTC Engine Failed:{res}");
             }
             RtcService.EnableAudioPropertiesReport(2000);
@@ -135,10 +136,13 @@ namespace Pico.Platform.Samples.RtcDemo
         }
 
 
-        //initialize the plateformSDK
+        /// <summary>
+        /// Initialize the plateformSDK.
+        /// </summary>
         public void Init()
         {
-            CoreService.AsyncInitialize("81e6b29509fad6ee4cb9edb6b4e49d22").OnComplete(m =>
+            //2129b7bd96d132f1cf109843f9b3781e    81e6b29509fad6ee4cb9edb6b4e49d22
+            CoreService.AsyncInitialize("2129b7bd96d132f1cf109843f9b3781e").OnComplete(m =>
             {
                 if (m.IsError)
                 {
@@ -149,7 +153,8 @@ namespace Pico.Platform.Samples.RtcDemo
                 if (m.Data == PlatformInitializeResult.Success || m.Data == PlatformInitializeResult.AlreadyInitialized)
                 {
                     AddInfo($"Init PlatformSdk successfully");
-                    initRtc();//after init success, init the RTC
+                    // After init success, init the RTC.
+                    InitRtc();
                 }
                 else
                 {
@@ -159,25 +164,29 @@ namespace Pico.Platform.Samples.RtcDemo
         }
 
 
-        //judge the roomID is valid or not
-        bool CheckRoomId()
+        /// <summary>
+        /// Judge the roomID is valid or not.
+        /// </summary> 
+        private bool CheckRoomId()
         {
-            if(String.IsNullOrWhiteSpace(InputRoomId.text))
+            if(String.IsNullOrWhiteSpace(inputRoomId.text))
             {
-                AddInfo("please input room id");
+                AddInfo("Please input room id");
                 return false;
             }
             return true;
         }
 
 
-        //click the "JoinRoom" button to join room
+        /// <summary>
+        /// Click the "JoinRoom" button to join room.
+        /// </summary>
         public void OnClickJoinRoom()
         {
             if (!CheckRoomId())
                 return;
-            var userId = myUser.ID;
-            var roomId = InputRoomId.text;
+            var userId = MyUser.ID;
+            var roomId = inputRoomId.text;
             AddInfo($"userId={userId} roomId={roomId} ");
             var privilege = new Dictionary<RtcPrivilege, int>();
             privilege.Add(RtcPrivilege.PublishStream, 3600 * 2);
@@ -198,7 +207,9 @@ namespace Pico.Platform.Samples.RtcDemo
         }
 
 
-        //when two user match together, call this function
+        /// <summary>
+        /// Callback function When two users match together.
+        /// </summary> 
         private void OnJoinRoom(Message<RtcJoinRoomResult> msg)
         {
             if (msg.IsError)
@@ -211,31 +222,46 @@ namespace Pico.Platform.Samples.RtcDemo
                     roomId = joinRoomResult.RoomId;
                 }
 
-                //AddInfo($"[JoinRoomError]code={err.Code} message={err.Message} roomId={roomId}");
+                AddInfo($"[JoinRoomError] code={err.Code} message={err.Message} roomId={roomId}");
                 return;
             }
-            RtcService.StartAudioCapture();//open audio capture
-            RtcService.PublishRoom(InputRoomId.text);//open audio publish 
+            // Open audio capture.
+            RtcService.StartAudioCapture();
+            // Open audio publish.
+            RtcService.PublishRoom(inputRoomId.text);
             var rtcJoinRoomResult = msg.Data;
             if (rtcJoinRoomResult.ErrorCode != 0)
             {
-                //AddInfo($"[JoinRoomError]code={rtcJoinRoomResult.ErrorCode} RoomId={rtcJoinRoomResult.RoomId} UserId={rtcJoinRoomResult.UserId}");
+                AddInfo($"[JoinRoomError] code={rtcJoinRoomResult.ErrorCode} RoomId={rtcJoinRoomResult.RoomId} UserId={rtcJoinRoomResult.UserId}");
                 return;
             }
             
-            //AddInfo($"[JoinRoomOk] Elapsed:{rtcJoinRoomResult.Elapsed} JoinType:{rtcJoinRoomResult.JoinType} RoomId:{rtcJoinRoomResult.RoomId} UserName:{rtcJoinRoomResult.UserId}");
+            AddInfo($"[JoinRoomOk] Elapsed:{rtcJoinRoomResult.Elapsed} JoinType:{rtcJoinRoomResult.JoinType} RoomId:{rtcJoinRoomResult.RoomId} UserName:{rtcJoinRoomResult.UserId}");
         }
 
 
-        //click the "LeaveRoom" button to leave room
+        /// <summary>
+        /// Click the "LeaveRoom" button to leave room.
+        /// </summary>
         public void OnClickLeaveRoom()
         {
-            AddInfo("Click Leave Room Button");
-            int result = RtcService.LeaveRoom(InputRoomId.text);
-            AddInfo($"[LeaveRoomResult]={result},RoomId={InputRoomId.text}");
+            int result = RtcService.LeaveRoom(inputRoomId.text);
+            AddInfo($"[LeaveRoomResult]={result},RoomId={inputRoomId.text}");
         }
 
-        //When user leave room, call this function 
+
+        /// <summary>
+        /// Clear the text.
+        /// </summary>
+        public void ClearText()
+        {
+            Info.text = "";
+        }
+
+
+        /// <summary>
+        /// Callback function When user leave room.
+        /// </summary> 
         private void OnLeaveRoom(Message<RtcLeaveRoomResult> msg)
         {
             if (msg.IsError)
@@ -246,17 +272,23 @@ namespace Pico.Platform.Samples.RtcDemo
             }
 
             var res = msg.Data;
-            RtcService.StopAudioCapture();//stop the user audio capture
-            RtcService.UnPublishRoom(InputRoomId.text);//stop the audio publish 
+            // Stop the user audio capture.
+            RtcService.StopAudioCapture();
+            // Stop the audio publish.
+            RtcService.UnPublishRoom(inputRoomId.text);
             AddInfo($"[LeaveRoomOk]RoomId={res.RoomId}");
         }
 
 
+        /// <summary>
+        /// Callback function for user leaving the room.
+        /// </summary> 
         private void OnUserLeaveRoom(Message<RtcUserLeaveInfo> msg)
         {
             if (msg.IsError)
             {
                 var err = msg.GetError();
+                AddInfo($"[UserLeave] Error {err.Code} {err.Message}");
                 return;
             }
 
@@ -264,85 +296,184 @@ namespace Pico.Platform.Samples.RtcDemo
             AddInfo($"[UserLeave]User[{res.UserId}] left room[{res.RoomId}],offline reason£º{res.OfflineReason}");
         }
 
+
+        /// <summary>
+        /// Callback function for user joining the room.
+        /// </summary> 
         private void OnUserJoinRoom(Message<RtcUserJoinInfo> msg)
         {
             if (msg.IsError)
             {
                 var err = msg.GetError();
+                AddInfo($"[UserJoin] Error {err.Code} {err.Message}");
                 return;
             }
 
             var res = msg.Data;
-            AddInfo($"[UserJoin]user={res.UserId} join room={res.RoomId},UserExtra={res.UserExtra},TimeElapsed{res.Elapsed}");
+            AddInfo($"[UserJoin] user={res.UserId} join room={res.RoomId},UserExtra={res.UserExtra},TimeElapsed{res.Elapsed}");
         }
 
+
+        /// <summary>
+        /// Callback function when room state is updated.
+        /// </summary> 
         private void OnRoomStats(Message<RtcRoomStats> msg)
         {
             if (msg.IsError)
             {
                 var err = msg.GetError();
-                AddInfo($"[RoomStats]Error {err.Code} {err.Message}");
+                AddInfo($"[RoomStats] Error {err.Code} {err.Message}");
                 return;
             }
 
-            if (Time.realtimeSinceStartup - _lastRoomStatsTime < 10)
+            if (Time.realtimeSinceStartup - lastRoomStatsTime < 10)
             {
                 return;
             }
 
-            _lastRoomStatsTime = Time.realtimeSinceStartup;
+            lastRoomStatsTime = Time.realtimeSinceStartup;
             var res = msg.Data;
-            AddInfo($"[RoomStats]RoomId={res.RoomId} UserCount={res.UserCount} Duration={res.TotalDuration}");
+            AddInfo($"[RoomStats] RoomId={res.RoomId} UserCount={res.UserCount} Duration={res.TotalDuration}");
         }
 
-        private void OnWarn(Message<int> message)
+
+        /// <summary>
+        /// Set the callback to get warning messages from the RTC engine.
+        /// </summary> 
+        private void OnWarn(Message<int> msg)
         {
-            AddInfo($"[RtcWarn] {message.Data}");
+            if(msg.IsError)
+            {
+                var err = msg.GetError();
+                AddInfo($"[RtcWarn]  Error {err.Code} {err.Message}");
+                return;
+            }
+            AddInfo($"[RtcWarn] {msg.Data}");
         }
 
-        private void OnError(Message<int> message)
+
+        /// <summary>
+        /// Set the callback to get error messages from the RTC engine.
+        /// </summary> 
+        private void OnError(Message<int> msg)
         {
-            AddInfo($"[RtcError] {message.Data}");
+            if(msg.IsError)
+            {
+                var err = msg.GetError();
+                AddInfo($"[EtcError] Error {err.Code} {err.Message}");
+                return;
+            }
+            AddInfo($"[RtcError] {msg.Data}");
         }
 
-        private void OnRoomWarn(Message<RtcRoomWarn> message)
+
+        /// <summary>
+        /// Set the callback to get warning messages from the room.
+        /// </summary> 
+        private void OnRoomWarn(Message<RtcRoomWarn> msg)
         {
-            var e = message.Data;
-            AddInfo($"[RtcRoomWarn]RoomId={e.RoomId} Code={e.Code}");
+            if (msg.IsError)
+            {
+                var err = msg.GetError();
+                AddInfo($"[RoomWarn] Error {err.Code} {err.Message}");
+                return;
+            }
+            var e = msg.Data;
+            AddInfo($"[RtcRoomWarn] RoomId={e.RoomId} Code={e.Code}");
         }
 
-        private void OnRoomError(Message<RtcRoomError> message)
+
+        /// <summary>
+        /// Set the callback to get error messages from the room.
+        /// </summary> 
+        private void OnRoomError(Message<RtcRoomError> msg)
         {
-            var e = message.Data;
-            AddInfo($"[RtcRoomError]RoomId={e.RoomId} Code={e.Code}");
+            if (msg.IsError)
+            {
+                var err = msg.GetError();
+                AddInfo($"[RoomError] Error {err.Code} {err.Message}");
+                return;
+            }
+            var e = msg.Data;
+            AddInfo($"[RtcRoomError] RoomId={e.RoomId} Code={e.Code}");
         }
 
-        private void OnConnectionStateChange(Message<RtcConnectionState> message)
+
+        /// <summary>
+        /// Set the callback to get notified when the state of the connection to the RTC server has changed.
+        /// </summary> 
+        private void OnConnectionStateChange(Message<RtcConnectionState> msg)
         {
-            AddInfo($"[ConnectionStateChange] {message.Data}");
+            if (msg.IsError)
+            {
+                var err = msg.GetError();
+                AddInfo($"[ConnectionStateChange] Error {err.Code} {err.Message}");
+                return;
+            }
+            AddInfo($"[ConnectionStateChange] {msg.Data}");
         }
 
-        private void OnUserMuteAudio(Message<RtcMuteInfo> message)
+
+        /// <summary>
+        /// Set the callback to get notified when the user has muted local audio.
+        /// </summary> 
+        private void OnUserMuteAudio(Message<RtcMuteInfo> msg)
         {
-            var d = message.Data;
-            AddInfo($"[UserMuteAudio]userId={d.UserId} muteState={d.MuteState}");
+            if (msg.IsError)
+            {
+                var err = msg.GetError();
+                AddInfo($"[UserMuteAudio] Error {err.Code} {err.Message}");
+                return;
+            }
+            var d = msg.Data;
+            AddInfo($"[UserMuteAudio] userId={d.UserId} muteState={d.MuteState}");
         }
 
-        private void OnUserStartAudioCapture(Message<string> message)
+
+        /// <summary>
+        /// Callback function when user start audio capture.
+        /// </summary> 
+        private void OnUserStartAudioCapture(Message<string> msg)
         {
-            var d = message.Data;
-            AddInfo($"[UserStartAudioCapture]UserId={d}");
+            if (msg.IsError)
+            {
+                var err = msg.GetError();
+                AddInfo($"[UserStartAudioCapture] Error {err.Code} {err.Message}");
+                return;
+            }
+            var d = msg.Data;
+            AddInfo($"[UserStartAudioCapture] UserId={d}");
         }
 
-        private void OnUserStopAudioCapture(Message<string> message)
+
+        /// <summary>
+        /// Callback function when user stop audio capture.
+        /// </summary> 
+        private void OnUserStopAudioCapture(Message<string> msg)
         {
-            var d = message.Data;
-            AddInfo($"[UserStopAudioCapture]UserId={d}");
+            if (msg.IsError)
+            {
+                var err = msg.GetError();
+                AddInfo($"[UserStopAudioCapture] Error {err.Code} {err.Message}");
+                return;
+            }
+            var d = msg.Data;
+            AddInfo($"[UserStopAudioCapture] UserId={d}");
         }
 
-        private void OnLocalAudioPropertiesReport(Message<RtcLocalAudioPropertiesReport> message)
+
+        /// <summary>
+        /// Callback function to receive local audio report.
+        /// </summary> 
+        private void OnLocalAudioPropertiesReport(Message<RtcLocalAudioPropertiesReport> msg)
         {
-            var d = message.Data;
+            if (msg.IsError)
+            {
+                var err = msg.GetError();
+                AddInfo($"[LocalAudioPropertiesReport] Error {err.Code} {err.Message}");
+                return;
+            }
+            var d = msg.Data;
             StringBuilder builder = new StringBuilder();
             foreach (var i in d.AudioPropertiesInfos)
             {
@@ -352,9 +483,19 @@ namespace Pico.Platform.Samples.RtcDemo
             AddInfo($@"[LocalAudioPropertiesReport] {d.AudioPropertiesInfos.Length} LocalVolume={builder}");
         }
 
-        private void OnRemoteAudioPropertiesReport(Message<RtcRemoteAudioPropertiesReport> message)
+
+        /// <summary>
+        /// Callback function to receive remote audio report.
+        /// </summary> 
+        private void OnRemoteAudioPropertiesReport(Message<RtcRemoteAudioPropertiesReport> msg)
         {
-            var d = message.Data;
+            if (msg.IsError)
+            {
+                var err = msg.GetError();
+                AddInfo($"[RemoteAudioPropertiesReport] Error {err.Code} {err.Message}");
+                return;
+            }
+            var d = msg.Data;
             StringBuilder builder = new StringBuilder();
             foreach (var usr in d.AudioPropertiesInfos)
             {
