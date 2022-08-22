@@ -120,7 +120,7 @@ namespace Pico.Platform.Samples.RtcDemo
                 }
                 else
                 {
-                    CoreService.AsyncInitialize("platform4unity_test").OnComplete(m =>
+                    CoreService.AsyncInitialize("81e6b29509fad6ee4cb9edb6b4e49d22").OnComplete(m =>
                     {
                         if (m.IsError)
                         {

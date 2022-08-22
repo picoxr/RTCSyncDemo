@@ -24,9 +24,9 @@ namespace Pico.Platform.Samples.RtcDemo
 
 
         private void Start()
-        { 
-            var mute = GameObject.Find("AudioMute").GetComponent<Toggle>(); 
-            var muteOthers = GameObject.Find("MuteOthers").GetComponent<Toggle>(); 
+        {
+            var muteOthers = GameObject.Find("MuteOthers").GetComponent<Toggle>();
+            var muteSelf = GameObject.Find("AudioMute").GetComponent<Toggle>(); 
             inputRoomId = GameObject.Find("InputRoomId").GetComponent<InputField>(); 
 
             // Callback function of RtcService.
@@ -46,6 +46,7 @@ namespace Pico.Platform.Samples.RtcDemo
             RtcService.SetOnLocalAudioPropertiesReport(OnLocalAudioPropertiesReport);
             RtcService.SetOnRemoteAudioPropertiesReport(OnRemoteAudioPropertiesReport);
 
+            AddInfo("start success");
 
             // Turn on or off the others' audio in the room.
             muteOthers.onValueChanged.AddListener((v) =>
@@ -65,7 +66,7 @@ namespace Pico.Platform.Samples.RtcDemo
             });
 
             // Turn on or off user's own audio.
-            mute.onValueChanged.AddListener(mute =>
+            muteSelf.onValueChanged.AddListener(mute =>
             {
                 AddInfo($"MuteLocalAudio {mute}");
                 if (mute)
@@ -140,9 +141,8 @@ namespace Pico.Platform.Samples.RtcDemo
         /// Initialize the plateformSDK.
         /// </summary>
         public void Init()
-        {
-            //2129b7bd96d132f1cf109843f9b3781e    81e6b29509fad6ee4cb9edb6b4e49d22
-            CoreService.AsyncInitialize("2129b7bd96d132f1cf109843f9b3781e").OnComplete(m =>
+        { 
+            CoreService.AsyncInitialize("81e6b29509fad6ee4cb9edb6b4e49d22").OnComplete(m =>
             {
                 if (m.IsError)
                 {
@@ -208,7 +208,7 @@ namespace Pico.Platform.Samples.RtcDemo
 
 
         /// <summary>
-        /// Callback function When two users match together.
+        /// Callback of JoinRoom to get RtcJoinRoomResult.
         /// </summary> 
         private void OnJoinRoom(Message<RtcJoinRoomResult> msg)
         {
