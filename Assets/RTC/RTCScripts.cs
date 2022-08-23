@@ -46,7 +46,7 @@ namespace Pico.Platform.Samples.RtcDemo
             RtcService.SetOnLocalAudioPropertiesReport(OnLocalAudioPropertiesReport);
             RtcService.SetOnRemoteAudioPropertiesReport(OnRemoteAudioPropertiesReport);
 
-            AddInfo("start success");
+            AddInfo("Hello World");
 
             // Turn on or off the others' audio in the room.
             muteOthers.onValueChanged.AddListener((v) =>
