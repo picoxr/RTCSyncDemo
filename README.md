@@ -15,7 +15,7 @@
 
 -  This demo shows how to use the Pico Unity Platform SDK to implement Real-Time Communication. 
 
-​	![screenshot](https://github.com/picoxr/RTCSyncDemo/blob/main/Assets/Screenshot/screenshot.jpg)
+​	![screenshot](https://github.com/picoxr/RTCSyncDemo/blob/main/Assets/Screenshot/picture1.jpg)
 
 Here is the instruction of RTC demo:
 
@@ -23,12 +23,12 @@ Here is the instruction of RTC demo:
 
 - **RoomId：** enter the room id you want to enter or create (note: only user inputs same room id can join the same room).
 
-- **JoinRTCRoom:** join the room and open the audio.
+- **JoinRtcRoom:** join the room and open the audio.
 
 - **MuteOthers:** receive or not to receive the sound of everyone else in the room.
 
 - **MuteSelf:** make oneself voice able/unable to be heard be others in the same room.
 
-- **LeaveRTCRoom:** leave the room and stop the audio.
+- **LeaveRtcRoom:** leave the room and stop the audio.
 
-- **clear:** clear the text on the right.
+- **ClearText:** clear the text on the right.
