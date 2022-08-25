@@ -132,6 +132,7 @@ namespace Pico.Platform.Samples.RtcDemo
                 AddInfo($"Init RTC Engine Failed:{res}");
                 throw new UnityException($"Init RTC Engine Failed:{res}");
             }
+            RtcService.SetAudioScenario(RtcAudioScenarioType.GameStreaming);
             RtcService.EnableAudioPropertiesReport(2000);
             Login();
         }
