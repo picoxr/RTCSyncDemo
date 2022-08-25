@@ -31,4 +31,4 @@ Here is the instruction of RTC demo:
 
 - **LeaveRtcRoom:** leave the room and stop the audio.
 
-- **X:** clear the text on the right.
+- **X:** clear the text.
