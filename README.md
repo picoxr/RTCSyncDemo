@@ -4,12 +4,12 @@
 
 ## Environment：
 
-- Unity 2020.3.36f1
-- Pico Unity Integration SDK v2.0.5
+- Unity 2020.3.431f1
+- Pico Unity Integration SDK v2.1.2
 
 ## Applicable devices:
 
-- Neo 3 series
+- Neo 3 series, PICO 4
 
 ## Description：
 
@@ -18,6 +18,12 @@
 ​	![screenshot](https://github.com/picoxr/RTCSyncDemo/blob/main/Assets/Screenshot/screenshot%201.jpg)
 
 Here is the instruction of RTC demo:
+- **Note: ** 
+1. In order to test the Platform SDK you will need an AppID after creating a game on our Developer portal
+2. Use the AppID in the PXR_SDK->PlatformSetting->User Entitlement Check
+3. Enable Entitlement Check Simulation
+4. Add your Device Serial Number(Found in Headset under Settings->General->About->Device Serial Number)
+5. Build the project to your headset to test since it will require your logged in Pico Account for the Login step
 
 - **Login：** click to initialize the Pico platform SDK, initialize the RTC engine and login user account.
 

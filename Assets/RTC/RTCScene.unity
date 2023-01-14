@@ -686,7 +686,6 @@ GameObject:
   - component: {fileID: 494603019}
   - component: {fileID: 494603018}
   - component: {fileID: 494603017}
-  - component: {fileID: 494603016}
   m_Layer: 0
   m_Name: FPS
   m_TagString: Untagged
@@ -713,18 +712,6 @@ RectTransform:
   m_AnchoredPosition: {x: -0.05, y: 0.1}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &494603016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 494603014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0686a02cb705eb4eb372aac02223c3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!223 &494603017
 Canvas:
   m_ObjectHideFlags: 0
@@ -832,14 +819,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hand: 1
-  customModel: 0
-  g2: {fileID: 1708342051940834, guid: 721fb128f76bd9b42be548dae9181de3, type: 3}
-  neo2L: {fileID: 1723325941153176, guid: 53aac5178bc9eac44b0aa803b9f189be, type: 3}
-  neo2R: {fileID: 1378001143042502, guid: 9a799acc17167fa4cacc2e9a29cc4ba1, type: 3}
   neo3L: {fileID: 414784878285137478, guid: ba669b48860575744a98e41d08391cd3, type: 3}
   neo3R: {fileID: 8571202708993718213, guid: 50249800e4104084fb51ed64f7e56ffd, type: 3}
-  mobileMaterial: {fileID: 2100000, guid: ea5d1bb890cef78439598b7062576fa3, type: 2}
-  standardMaterial: {fileID: 2100000, guid: 4c2b2924173d4814f886ea72b5c47f69, type: 2}
+  PICO_4L: {fileID: 0}
+  PICO_4R: {fileID: 0}
+  legacyMaterial: {fileID: 0}
   controllerSimulation: 0
 --- !u!1 &737311931
 GameObject:
@@ -851,6 +835,7 @@ GameObject:
   m_Component:
   - component: {fileID: 737311932}
   - component: {fileID: 737311933}
+  - component: {fileID: 737311934}
   m_Layer: 0
   m_Name: XR Rig
   m_TagString: Untagged
@@ -890,6 +875,40 @@ MonoBehaviour:
   m_TrackingOriginMode: 1
   m_TrackingSpace: 1
   m_CameraYOffset: 1.36144
+--- !u!114 &737311934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737311931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd9f82377aeb9704193bd866d119aaa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showFps: 0
+  useDefaultFps: 1
+  customFps: 0
+  screenFade: 0
+  eyeTracking: 0
+  trackingMode: 0
+  faceTracking: 0
+  lipsyncTracking: 0
+  foveationLevel: -1
+  openMRC: 0
+  foregroundLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  backLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  backCameraObj: {fileID: 0}
+  foregroundCameraObj: {fileID: 0}
+  mrcRenderTexture: {fileID: 0}
+  foregroundMrcRenderTexture: {fileID: 0}
+  appCheckResult: 100
+  useRecommendedAntiAliasingLevel: 1
 --- !u!1 &858770675
 GameObject:
   m_ObjectHideFlags: 0
@@ -1633,14 +1652,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hand: 0
-  customModel: 0
-  g2: {fileID: 1708342051940834, guid: 721fb128f76bd9b42be548dae9181de3, type: 3}
-  neo2L: {fileID: 1723325941153176, guid: 53aac5178bc9eac44b0aa803b9f189be, type: 3}
-  neo2R: {fileID: 1378001143042502, guid: 9a799acc17167fa4cacc2e9a29cc4ba1, type: 3}
   neo3L: {fileID: 414784878285137478, guid: ba669b48860575744a98e41d08391cd3, type: 3}
   neo3R: {fileID: 8571202708993718213, guid: 50249800e4104084fb51ed64f7e56ffd, type: 3}
-  mobileMaterial: {fileID: 2100000, guid: ea5d1bb890cef78439598b7062576fa3, type: 2}
-  standardMaterial: {fileID: 2100000, guid: 4c2b2924173d4814f886ea72b5c47f69, type: 2}
+  PICO_4L: {fileID: 0}
+  PICO_4R: {fileID: 0}
+  legacyMaterial: {fileID: 0}
   controllerSimulation: 0
 --- !u!222 &6726674225249994544
 CanvasRenderer:

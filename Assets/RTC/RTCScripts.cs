@@ -40,7 +40,8 @@ namespace Pico.Platform.Samples.RtcDemo
             RtcService.SetOnRoomWarnCallback(OnRoomWarn);
             RtcService.SetOnRoomErrorCallback(OnRoomError);
             RtcService.SetOnConnectionStateChangeCallback(OnConnectionStateChange);
-            RtcService.SetOnUserMuteAudio(OnUserMuteAudio);
+            RtcService.SetOnUserPublishStream(OnUserPublishAudioStream);
+            RtcService.SetOnUserUnPublishStream(OnUserUnPublishStream);
             RtcService.SetOnUserStartAudioCapture(OnUserStartAudioCapture);
             RtcService.SetOnUserStopAudioCapture(OnUserStopAudioCapture);
             RtcService.SetOnLocalAudioPropertiesReport(OnLocalAudioPropertiesReport);
@@ -71,15 +72,17 @@ namespace Pico.Platform.Samples.RtcDemo
                 AddInfo($"MuteLocalAudio {mute}");
                 if (mute)
                 {
-                    RtcService.MuteLocalAudio(RtcMuteState.On);
+                    RtcService.UnPublishRoom(inputRoomId.text);
                 }
                 else
                 {
-                    RtcService.MuteLocalAudio(RtcMuteState.Off);
+                    RtcService.PublishRoom(inputRoomId.text);
                 }
                 AddInfo($"MuteLocalAudio {mute} Done");
             }); 
         }
+
+        
 
 
         /// <summary>
@@ -143,7 +146,7 @@ namespace Pico.Platform.Samples.RtcDemo
         /// </summary>
         public void Init()
         { 
-            CoreService.AsyncInitialize("81e6b29509fad6ee4cb9edb6b4e49d22").OnComplete(m =>
+            CoreService.AsyncInitialize().OnComplete(m =>
             {
                 if (m.IsError)
                 {
@@ -414,11 +417,10 @@ namespace Pico.Platform.Samples.RtcDemo
             AddInfo($"[ConnectionStateChange] {msg.Data}");
         }
 
-
         /// <summary>
-        /// Set the callback to get notified when the user has muted local audio.
-        /// </summary> 
-        private void OnUserMuteAudio(Message<RtcMuteInfo> msg)
+        /// Set the callback to get notified when user mutes local audio
+        /// </summary>
+        private void OnUserUnPublishStream(Message<RtcUserUnPublishInfo> msg)
         {
             if (msg.IsError)
             {
@@ -427,9 +429,24 @@ namespace Pico.Platform.Samples.RtcDemo
                 return;
             }
             var d = msg.Data;
-            AddInfo($"[UserMuteAudio] userId={d.UserId} muteState={d.MuteState}");
+            AddInfo($"[UserUnPublishStream] Mute Audio. userId={d.UserId} Reason for canceled publishing stream={d.Reason}");
         }
 
+        /// <summary>
+        /// Set the callback to get notified when user plays local audio
+        /// </summary>
+        /// <param name="msg"></param>
+        private void OnUserPublishAudioStream(Message<RtcUserPublishInfo> msg)
+        {
+            if (msg.IsError)
+            {
+                var err = msg.GetError();
+                AddInfo($"[UserMuteAudio] Error {err.Code} {err.Message}");
+                return;
+            }
+            var d = msg.Data;
+            AddInfo($"[UserPublishStream] Playing Audio. userId={d.UserId} MediaStreamType={d.MediaStreamType}");
+        }
 
         /// <summary>
         /// Callback function when user start audio capture.
